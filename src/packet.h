@@ -24,7 +24,6 @@
 
 #include <regex>
 
-
 struct SmartResponseConfig {
     int id;
     QString ifEquals;

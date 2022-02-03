@@ -22,6 +22,8 @@
 #include "globals.h"
 #include "sendpacketbutton.h"
 
+#include <regex>
+
 
 struct SmartResponseConfig {
     int id;

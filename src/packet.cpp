@@ -909,8 +909,22 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
     SmartResponseConfig config;
 
     QDEBUG() << "Checking smart " << smartList.size() << "For" << Packet::byteArrayToHex(data);
+    QDEBUG() << "Converting byte array into ascii" << data.toStdString().c_str();
 
-    //the incoming data has already been encoded.
+    std::string dataStr = data.toStdString();
+    bool regexMatch = false;
+
+    //std::regex uses ECMAScript matching rules
+    foreach(config, smartList) {
+        if(config.enabled) {
+            std::string testStr = config.encoding.toStdString();
+            std::regex testRegex(testStr);
+            std::smatch matches;
+            if(std::regex_match(dataStr, matches, testRegex)) {
+                return Packet::encodingToByteArray(config.encoding, config.replyWith);
+            }
+        }
+    }
 
     foreach (config, smartList) {
         if (config.enabled) {

@@ -22,3 +22,10 @@ jobs:
     - name: build
       run: |
            debuild --no-lintian --no-sign
+    - name: Upload Test Build Artifact
+      if: ${{ github.event_name == 'push' && github.ref_type == 'branch' && github.ref_name != 'master' && github.ref_name != 'development' }}
+      uses: actions/upload-artifact@v2
+      with:
+        retention-days: 5
+        name: packetsender-testbuild-${{ github.ref_name }}
+        path: obj-x86_64-linux-gnu/PacketSender
